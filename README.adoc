@@ -1,11 +1,173 @@
-= iSignThis.
-v1.0, 2020-10-29
+= K8s.
+v1.0, 2020-11-14
 :example-caption!:
 :sectnums:
-:sectnumlevels: 3
+:sectnumlevels: 7
 
-= 1. iSignThis
 
-== iSignThis
+== What is K8s
 
-iSignThis, iSignThis, iSignThis
+++++
+<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=139&end=321" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+++++
+
+== Main K8s Components
+
+++++
+<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=321&end=1350https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+++++
+
+=== Nodes and Pods
+- Node - physical or virtual machine.
+- Smalles unit of k8s is pod. Pod is abstraction over container. Usually 1 application per Pod. Pods in k8s commuticates via virtual k8s network. Echa Pod gets its own internal IP address.
+
+=== Service and Ingress
+- Service - permanent IP address that can be attached to to each Pod.
+- Lifecycle of Pod and Service NOT connected, if Pod dies the service and its ip address will stay, so you don't have to change that end point any more.
+- Ingress. Application needs to be acced from outside and for this you would have to create an external service. External service is the service that opens the communication from external sources. The request goes to Ingress and then it does the forwarding then to the service.
+
+[plantuml]
+....
+partition Node1 #LightSkyBlue {
+    - Ingress
+    partition my-app(pod) {
+        - Service
+    }
+    partition DB(pod) {
+        -Service
+    }
+}
+....
+
+=== ConfigMap and Secret
+- ConfigMap is external configuration of your application(url of a database or some other services, db username and password is not secure place to keep in ConfigMap). if we change endpoint of the servcice we just adjust the ConfigMap
+- Secret is just like ConfigMap, but the difference is that it is used to store secret data, credentials for example. The information is in base64 encoded format
+
+=== Volumes
+If DB container gets restarted the data would be gone. Volumes attaches a physical storage on a hard drive to Pod. That storage can be either on a local machine, meaning on the same server node where the pod is running or it could be on a remote storage, meaning outside of the k8s cluster, it could be a cloud storage or your own premise storage which is not part of k8s cluster.
+
+=== Deployment and Stateful Set
+
+== K8s Architecture
+
+++++
+<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=1350&end=2088https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+++++
+
+=== Two type of nodes
+- Master
+- Slave
+----
+- Each node has multiple Pods on it.
+- Three processes must be installed on every node
+----
+    * container runtime
+    *
+----
+- Worker Nodes do the actual work
+
+----
+
+
+[plantuml]
+----
+skinparam Legend {
+	BackgroundColor transparent
+	BorderColor transparent
+}
+legend
+Each node has multiple Pods on it
+Three processes must be installed on every node
+|_ container runtime
+|_ kubelet(1)
+|_ kube proxy(3)
+Worker Nodes do the actual work
+end legend
+----
+
+----
+(1) Kubelete - interacts with both - the container and node, Kubelet starts the pod with a container inside, and then assigning resources from that node to the container like cpu, ram and storage resources.
+----
+----
+(2) Servlet is a sort of loadbalancer that basically caches the request directed to the pod or the application and the forwads it to the repective pod
+----
+----
+(3) Kube proxy forwards the requests
+----
+
+[plantuml]
+----
+skinparam Legend {
+	BackgroundColor transparent
+	BorderColor transparent
+}
+legend
+How do you interact with this cluster
+|_How to:
+  |_ schedule pod?
+  |_ monitor?
+  |_ re-schedule/re-start pod?
+  |_ join a new Node?
+end legend
+----
+All these managing processes are done by *Master Nodes*
+[plantuml]
+----
+skinparam Legend {
+	BackgroundColor transparent
+	BorderColor transparent
+}
+legend
+Master processes
+|_Api server(cluster gateway)
+|_Scheduler
+|_Controller manager
+|_etcd(key value store of a cluster state. it is a cluster brain)
+  |_ Is the cluster healthy?
+  |_ What resources are available?
+  |_ Did the cluster state change?
+end legend
+----
+
+
+[plantuml]
+----
+title API Server
+SomeRequest -> APIServer
+APIServer -> ValidateRequest
+ValidateRequest -> "other processes"
+"other processes" -> Pod
+----
+
+[plantuml]
+----
+title Schedule
+ScheduleNewPod -> APIServer
+APIServer -> Scheduler
+Scheduler -> "Where to put the Pod?"
+"Where to put the Pod?" -> Kubelet
+
+----
+
+[plantuml]
+----
+title Controller manager
+"Controller manager" -> Scheduler
+Scheduler -> Kubelet
+Kubelet -> Pod
+
+----
+
+=== Example cluster set-up
+
+== Minikube and kubectl - Local Setup
+
+++++
+<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=2088&end=2693https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+++++
+
+== Main Kubectl Commands - K8s CLI
+
+++++
+<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=2693&end=https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+++++
