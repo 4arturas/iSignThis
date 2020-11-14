@@ -142,8 +142,8 @@ ValidateRequest -> "other processes"
 [plantuml]
 ----
 title Schedule
-ScheduleNewPod -> APIServer
-APIServer -> Scheduler
+"Schedule New Pod" -> "API Server"
+"API Server" -> Scheduler
 Scheduler -> "Where to put the Pod?"
 "Where to put the Pod?" -> Kubelet
 
