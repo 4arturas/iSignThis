@@ -596,3 +596,17 @@ Tool kubens
 == Persisting Data in K8s with Volumes
 == Deploying Stateful Apps with StatefulSet
 == K8s Services explained
+
+[plantuml]
+....
+rectangle Arrows
+rectangle Up
+rectangle Down
+rectangle Left
+rectangle Right
+
+Arrows -u-> Up
+Arrows -d-> Down
+Arrows -l-> Left
+Arrows -r-> Right
+....
