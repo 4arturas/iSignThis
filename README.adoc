@@ -171,3 +171,38 @@ Kubelet -> Pod
 ++++
 <!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=2693&end=https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
 ++++
+
+[plantuml]
+----
+skinparam Legend {
+	BackgroundColor transparent
+	BorderColor transparent
+    FontSize 17
+
+}
+skinparam classFontColor red
+skinparam classFontSize 10
+skinparam classFontName Aapex
+legend
+CRUD commands
+|_Create deployment
+  |_ kubectl create deployment [name]
+|_Edit deployment
+  |_ kubectl edit deployment [name]
+|_Delete deployment
+  |_kubectl delete deployment [name]
+|_etcd(key value store of a cluster state. it is a cluster brain)
+Status of different K8s components
+|_ kubectl get
+  |_ nodes
+  |_ pod
+  |_ services
+  |_ replicaset
+  |_ deployment
+Debbuging pods
+|_Log to console
+  |_ kubectl logs [pod name]
+|_ Get Interacitve terminal
+  |_ kubectl exec -it [pod name] --bin/bash
+end legend
+----
