@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    # makes a connection between the service and the deployment->metadata->labels->app or deployment->spec->template->metadata->label->app
+    app: nginx
+  ports:
+    - protocol: TCP
+      # on this port the service is accessible
+      port: 80
+      # connects to deployment->spec->template->spec->containerPort
+      targetPort: 8080

@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels: ...
+# Attributes of "spec" are specific to the kind!
+spec:
+  replicas: 1
+  selector: ...
+  template: ...

@@ -1,21 +1,21 @@
-= K8s.
+= K8s
 v1.0, 2020-11-14
 :example-caption!:
 :sectnums:
 :sectnumlevels: 7
-
+{set:sourcedir:k8s}
 
 == What is K8s
 
-++++
-<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=139&end=321" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
-++++
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=139&end=321" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
 
 == Main K8s Components
 
-++++
-<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=321&end=1350https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
-++++
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=321&end=1350" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
 
 === Nodes and Pods
 - Node - physical or virtual machine.
@@ -50,9 +50,9 @@ If DB container gets restarted the data would be gone. Volumes attaches a physic
 
 == K8s Architecture
 
-++++
-<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=1350&end=2088https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
-++++
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=1350&end=2088" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
 
 === Two type of nodes
 - Master
@@ -215,15 +215,15 @@ journalctl -f --unit k3s-agent
 ----
 /usr/local/bin/k3s-agent-uninstall.sh
 ----
-++++
-<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=2088&end=2693https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
-++++
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=2088&end=2693" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
 
 == Main Kubectl Commands - K8s CLI
 
-++++
-<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=2693&end=https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
-++++
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=2693&end=3724" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
 
 [plantuml]
 ----
@@ -271,5 +271,239 @@ kubectl get replicaset
 [plantuml]
 ----
 title Layers of abstration
-"Deployemt" ->
+Deployment -> ReplicaSet: manages
+ReplicaSet -> Pod: manages all the replicas of that pod
+Pod -> Container: is abstration of the
 ----
+[source]
+----
+kubectl edit deployment nginx-depl
+- change image to nginx:1.16
+kubectl get pod
+kubectl get replicaset
+----
+
+=== Debugging pods
+[source]
+----
+kubectl get pods
+kubectl logs nginx-depl-7fc44fc5d4-pc9wr
+kubectl create deployment mongo-depl --image=mongo
+kubectl get pods
+kubectl logs mongo-depl-5fd6b7d4b4-lr6dv
+kubectl describe pod mongo-depl-5fd6b7d4b4-lr6dv
+----
+[source]
+----
+kubectl get pods
+kubectl exec -it mongo-depl-5fd6b7d4b4-lr6dv -- bin/bash
+----
+=== Delete deployment
+[source]
+----
+kubectl get deployment
+kubectl delete deployment mongo-depl
+kubectl get pod
+kubectl get replicaset
+----
+=== Apply configuration file
+
+[source]
+.k8s/nginx-deployment.yaml
+----
+include::k8s/nginx-deployment.yaml[]
+----
+[source]
+----
+kubectl apply -f nginx-deployment.yaml
+kubectl get deployment
+kubectl get pod
+kubectl describe service nginx-service
+kubectl get pods -o wide
+----
+
+[source]
+.k8s/nginx-service.yaml
+----
+include::k8s/nginx-service.yaml[]
+----
+[source]
+----
+kubectl apply -f nginx-service.yaml
+kubectl get service
+----
+
+=== Delete components using configuration files
+[source]
+----
+kubectl delete -f nginx-deployment.yaml
+kubectl delete -f nginx-service.yaml
+
+----
+
+== K8s YAML Configuration File
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=3724&end=4577" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
+=== The 3 parts of configuration file
+Each K8s configuration file has 3 parts
+
+- Metatada
+- Specification
+- Status - is not in the file it will be automatically generated and added by K8s. In file is "Desired status", K8s generates "Actual status". If Desired and Actual does not match then K8s knows that somthing to be fixed there, so it is going to fix it. It is the self-healing feature K8s provides. This information comes from etcd.
+
+[source]
+.k8s/deployment-structure.yaml
+----
+include::k8s/deployment-structure.yaml[]
+----
+[source]
+.k8s/service-structure.yaml
+----
+include::k8s/service-structure.yaml[]
+----
+
+status is get using
+[source]
+----
+kubectl get deployment nginx-deployment -o yaml
+kubectl get deployment nginx-deployment -o yaml > nginx-deployment-result.txt
+----
+
+=== Format of configuration file
+YAML
+
+
+== Complete Application Setup with Kubernetes Compoenents
+
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=4577&end=6377" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
+
+=== Demo Project: MongoDB and MongoExpress
+
+==== mongoDB
+- Deployment / Pod
+- Service
+- ConfigMap
+- Secret
+
+==== mongo-express
+===== ConfigMap
+- mongoDB url
+
+===== Secret
+- DB user
+- DB password
+
+===== Accessible through browser
+- in order to do that we will create external service
+
+[plantuml]
+.....
+"Browser" -> "Mongo Express External Service"
+"Mongo Express External Service" -> "Mongo Express"
+"Mongo Express" -> "Mongo DB Internal Service"
+"Mongo DB Internal Service" -> "MongoDB Pod": "Secret: DB usr, DB pwd
+.....
+
+=== Lets create
+==== Mongo DB Internal service
+link:https://hub.docker.com/_/mongo[Mongo on docker hub]
+
+===== Create a Secret
+
+.k8s/mongo-db-secret.yaml
+----
+include::k8s/mongo-db-secret.yaml[]
+----
+
+[source]
+----
+echo -n 'username' | base64
+echo -n 'password' | base64
+----
+[source]
+----
+kubectl apply -f mongo-db-secret.yaml
+kubectl get secret
+kubectl describe secret mongodb-secret
+----
+
+===== Create Deployment
+.k8s/mongo-db-deployment.yaml
+----
+include::k8s/mongo-db-deployment.yaml[]
+----
+
+[source]
+----
+kubectl apply -f mongo-db-deployment.yaml
+kubectl get deployment
+kubectl get pod --watch
+----
+
+===== Create Service
+
+.k8s/mongo-db-service.yaml
+----
+include::k8s/mongo-db-service.yaml[]
+----
+[source]
+----
+kubectl apply -f mongo-db-service.yaml
+kubectl get service
+kubectl get pod -o wide
+kubectl get all | grep mongodb
+----
+
+https://youtu.be/X48VuDVv0do?t=5604
+
+=== Mongo Express
+==== Mongo Express ConfigMap
+.k8s/mongo-express-configmap.yaml
+----
+include::k8s/mongo-express-configmap.yaml[]
+----
+[source]
+----
+kubectl apply -f mongo-express-configmap.yaml
+kubectl describe configmap mongodb-configmap
+----
+==== Mongo Express Deployment
+link:https://hub.docker.com/_/mongo-express[Mongo-express on docker hub]
+
+.k8s/mongo-express-deployment.yaml
+----
+include::k8s/mongo-express-deployment.yaml[]
+----
+[source]
+----
+kubectl apply -f mongo-express-deployment.yaml
+----
+
+==== Mongo Express External Service
+
+.k8s/mongo-express-service.yaml
+----
+include::k8s/mongo-express-service.yaml[]
+----
+[source]
+----
+kubectl apply -f mongo-express-service.yaml
+kubectl get service
+----
+
+http://192.168.56.10:30000/
+
+== Organizing your components with K8s Namespaces
+
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=4577&end=6377" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
+
+== K8s Ingress explained
+== Helm - Package Manager
+== Persisting Data in K8s with Volumes
+== Deploying Stateful Apps with StatefulSet
+== K8s Services explained

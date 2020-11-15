@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+# what I want to create
+kind: Deployment
+metadata:
+  # the name of the deployment
+  name: nginx-deployment
+  labels:
+    # this is used by the service selector
+    app: nginx
+spec:
+  # how many replicas of the pods I want to create
+  replicas: 1
+  # specification for the deployment
+  selector:
+    matchLabels:
+      app: nginx
+  # specification for the pod. bluprint for the pods
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        # we want one container inside the pod
+        - name: nginx
+          image: nginx:1.16
+          ports:
+            - containerPort: 80
