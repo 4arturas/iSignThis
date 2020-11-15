@@ -162,6 +162,59 @@ Kubelet -> Pod
 
 == Minikube and kubectl - Local Setup
 
+=== Master
+==== Install
+[source]
+----
+hostnamectl set-hostname master.art.local
+echo "192.168.56.10 master.art.local master" >> /etc/hosts
+echo "192.168.56.11 node1.art.local node1" >> /etc/hosts
+echo "192.168.56.12 node2.art.local node2" >> /etc/hosts
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-ip=192.168.56.10 --flannel-iface=enp0s8" sh -
+----
+==== Debug
+[source]
+----
+systemctl status k3s
+journalctl -f --unit k3s
+watch -n3 kubectl get nodes
+----
+==== Config file
+[source]
+----
+cat /etc/rancher/k3s/k3s.yaml
+chmod 644 /etc/rancher/k3s/k3s.yaml
+----
+==== Token
+[source]
+----
+cat /var/lib/rancher/k3s/server/token
+----
+==== Uninstall
+[source]
+----
+/usr/local/bin/k3s-uninstall.sh
+----
+=== Node
+==== Install
+[source]
+----
+hostnamectl set-hostname node1.art.local node1
+echo "192.168.56.10 master.art.local master" >> /etc/hosts
+echo "192.168.56.11 node1.art.local node1" >> /etc/hosts
+echo "192.168.56.12 node2.art.local node2" >> /etc/hosts
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-ip=192.168.56.11 --flannel-iface=enp0s8" K3S_URL="https://192.168.56.10:6443" K3S_TOKEN="K108ada0b700e91cf2201586cedb9e0f26b7a5a7923fb551affb7aca393e03630c5::server:8568fd7b7e57846f03294ea4f6a3de00" sh -
+----
+==== Debug
+[source]
+----
+journalctl -f --unit k3s-agent
+----
+==== Uninstall
+[source]
+----
+/usr/local/bin/k3s-agent-uninstall.sh
+----
 ++++
 <!--<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=2088&end=2693https://youtu.be/X48VuDVv0do?t=1349" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
 ++++
@@ -205,4 +258,18 @@ Debbuging pods
 |_ Get Interacitve terminal
   |_ kubectl exec -it [pod name] --bin/bash
 end legend
+----
+
+[source]
+----
+kubectl create -h
+kubectl create deployment nginx-depl --image=nginx
+kubectl get deployment
+kubectl get pod
+kubectl get replicaset
+----
+[plantuml]
+----
+title Layers of abstration
+"Deployemt" ->
 ----
