@@ -499,10 +499,99 @@ http://192.168.56.10:30000/
 == Organizing your components with K8s Namespaces
 
 //++++
-//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=4577&end=6377" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=6377&end=7313" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 //++++
 
+*Namespace* cluster inside a cluster
+
+* K8s gives 4 namespaces out of the box
+** *kube-system* is not meant for your own use
+** *kube-public* - it has ConfigMap
+** *kube-node-lease* - it holds information about heartbeats of nodes
+** *default* - creates resources at the begining
+[sorce]
+----
+kubectl get namespaces
+kubectl create namespace my-namespace
+kubectl get namespace
+----
+[plantuml]
+....
+partition "Kubernetes Cluster" #LightSkyBlue {
+    partition kube-system {
+    }
+    partition kube-public {
+    }
+    partition default {
+    }
+}
+....
+
+
+What is the need for *namespaces*?::
+* Logically group resources inside cluster.
+[plantuml]
+....
+partition "Kubernetes Cluster" #LightSkyBlue {
+    partition "Database\nnamespace" {
+    }
+    partition "Monitoring\nnamespace" {
+    }
+    partition "Elastic Stack\nnamespace" {
+    }
+    partition "Nginx-Ingress\nnamespace" {
+    }
+}
+....
+* Conflicts: Many teams, same application
+* Rsource Sharing: Staging and Development
+* Rsource Sharing: Blue/Green Deployment
+
+[plantuml]
+....
+partition "Kubernetes Cluster" #LightSkyBlue {
+    partition "Production Blue(active)" {
+    }
+    partition "Production Green(future)" {
+    }
+}
+....
+* Access and Resource Limits on Namespaces - for example we have two teams with different namespaces with separate resources on namespaces
+
+Use cases when to use Namespaces::
+. *Structure* components
+. *Avoid conflicts* between teams
+. *Share services* between different evironments
+. *Access and Resource Limits* on Namespaces Level
+
+Characteristics of Namespaces?::
+. You can't access most resources from another Namespace
+. Components, which can't be created within a Namespace: volume, node
+
+Create components in Namespaces?
+
+* First way
+[source]
+----
+kubectl apply -f mysql-configmap.yaml --namespace=my-namespace
+----
+* Second in configuration file
+[source]
+----
+metada.namespace: my-namepace
+----
+
+Change active namespace
+[source]
+----
+Tool kubens
+----
+
 == K8s Ingress explained
+
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=7313&end=" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
 == Helm - Package Manager
 == Persisting Data in K8s with Volumes
 == Deploying Stateful Apps with StatefulSet
