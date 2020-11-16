@@ -592,10 +592,94 @@ Tool kubens
 //++++
 //<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=7313&end=" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 //++++
+
+=== What is Ingress?
+
+==== External service vs. Ingress
+- External service good for test cases
+
+[plantuml]
+....
+
+partition "External Service" {
+    partition "Browser" #DarkSalmon {
+        start
+        - 192.168.56.10:35010
+    }
+
+    partition "Kubernetes Cluster" #RoyalBlue {
+        partition "my-app service" {
+            - external
+        }
+        partition "my-app pod" {
+            -internal
+            stop
+        }
+
+    }
+}
+....
+
+- Ingress IP address and ports is not opened!
+
+[plantuml]
+....
+partition "Ingress" {
+    partition "Browser" #DarkSalmon {
+        (*) --> "https://my-app-2.com" <<Stage>>
+    }
+    partition "Kubernetes Cluster" #RoyalBlue {
+
+        partition "my-app-2 ingress" #White {
+            "https://my-app-2.com" -down-> "ingress" <<Stage>>
+        }
+        partition "my-app-2 service" #White {
+            "ingress" -down-> "service" <<Stage>>
+        }
+        partition "my-app-2 pod" #White {
+            "service" -down-> "pod" <<Bash>>
+        }
+    }
+}
+....
+
+=== Ingress YAML configuration
+=== When do you need Ingress?
+=== Ingress controller
+
 == Helm - Package Manager
 == Persisting Data in K8s with Volumes
 == Deploying Stateful Apps with StatefulSet
 == K8s Services explained
+
+
+
+[plantuml]
+....
+  partition "My Partition" {
+    (*) --> "Step1" <<Stage>>
+    --> "Step2" <<Stage>>
+    --> (*)
+    }
+
+    partition "First left partition" {
+    "Step1" -left-> "First left Action" <<Bash>>
+    }
+
+    partition "First right partition" {
+    "Step1" -right-> "First right Action" <<Bash>>
+    }
+
+    partition "Second left partition" {
+    "Step2" -left-> "Second left Action" <<Bash>>
+    }
+
+    partition "Second right partition" {
+    "Step2" -right-> "Second right Action" <<Bash>>
+    }
+
+    "Second left Action" .[hidden]u.> "First left Action"
+....
 
 [plantuml]
 ....
