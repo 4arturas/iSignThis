@@ -740,12 +740,21 @@ https://192.168.56.10:32323/
 ----
 
 == Helm - Package Manager
-package manager for K8s to package yaml files, like yum, apt
+
 //++++
-//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=8658&end=" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=8658&end=9488" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 //++++
 
+package manager for K8s to package yaml files, like yum, apt
+
+TODO
+
 == Persisting Data in K8s with Volumes
+
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=9488&end=" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
+
 == Deploying Stateful Apps with StatefulSet
 == K8s Services explained
 
