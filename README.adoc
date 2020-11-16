@@ -205,6 +205,12 @@ echo "192.168.56.11 node1.art.local node1" >> /etc/hosts
 echo "192.168.56.12 node2.art.local node2" >> /etc/hosts
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-ip=192.168.56.11 --flannel-iface=enp0s8" K3S_URL="https://192.168.56.10:6443" K3S_TOKEN="K108ada0b700e91cf2201586cedb9e0f26b7a5a7923fb551affb7aca393e03630c5::server:8568fd7b7e57846f03294ea4f6a3de00" sh -
 ----
+==== Install specifi K3s version
+link:https://github.com/rancher/k3s/releases[K3s versions]
+[source]
+----
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.18.12+k3s1 sh -
+----
 ==== Debug
 [source]
 ----
@@ -589,7 +595,7 @@ Tool kubens
 == K8s Ingress explained
 
 //++++
-//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=7313&end=" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=7313&end=8658" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 //++++
 
 === What is Ingress?
@@ -666,6 +672,7 @@ link:https://kubernetes.io/docs/concepts/services-networking/ingress-controllers
 link:https://kubernetes.github.io/ingress-nginx/deploy/baremetal/[Bare metal]
 
 ==== Configure Ingress
+TODO
 [source]
 ----
 GITHUB_URL=https://github.com/kubernetes/dashboard/releases
@@ -710,13 +717,34 @@ k3s kubectl create -f dashboard.admin-user.yml -f dashboard.admin-user-role.yml
 ----
 include::k8s/dashboard-ingress.yaml[]
 ----
+TODO
+[source]
+----
+kubectl apply -f dashboard-ingress.yaml
+# wait for ADDRESS to be assigned by K8s
+watch kubectl get ingress -n kubernetes-dashboard
+echo "10.0.2.15 dashboard.com" >> /etc/hosts
+ping dashboard.com
+curl dashboard.com
+kubectl describe ingress dashboard-ingress -n kubernetes-dashboard
+kubectl get ingress dashboard-ingress -n kubernetes-dashboard
+----
 
-
-
-
-=== Ingress controller
+[source]
+----
+kubectl -n kubernetes-dashboard edit svc kubernetes-dashboard
+# change spec->type->ClusterIP to spec->type->NodePort
+# add spec->ports->nodePort=32323
+k3s kubectl -n kubernetes-dashboard describe secret admin-user-token | grep ^token
+https://192.168.56.10:32323/
+----
 
 == Helm - Package Manager
+package manager for K8s to package yaml files, like yum, apt
+//++++
+//<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=8658&end=" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+//++++
+
 == Persisting Data in K8s with Volumes
 == Deploying Stateful Apps with StatefulSet
 == K8s Services explained
