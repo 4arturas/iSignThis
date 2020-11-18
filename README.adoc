@@ -787,7 +787,10 @@ TODO
     "Second left Action" .[hidden]u.> "First left Action"
 ....
 
-.k8s/
+.k8s/exercise.yaml
+----
+include::k8s/excercise.yaml[]
+----
 
 [plantuml]
 ....
