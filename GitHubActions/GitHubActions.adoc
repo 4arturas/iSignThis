@@ -1,0 +1,15 @@
+= GitHub Actions
+v1.0, 2020-11-14
+:example-caption!:
+:sectnums:
+:sectnumlevels: 7
+{set:sourcedir:k8s}
+
+== What is GitHub Actions?
+=== Platform to automate developer workflows
+==== What are those workflows?
+What are those developer workflows in other words what is that the developers typically do that is so time consuming or error prone or just tedious that it needs automation.
+
+link:https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows[Events that trigger workflows]
+
+https://github.com/actions
