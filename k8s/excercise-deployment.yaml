@@ -5,15 +5,17 @@ metadata:
   labels:
     app: my-app
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: my-app
   template:
     metadata:
-      name: my-app
+      labels:
+        app: my-app
     spec:
       containers:
         - name: my-app
-          image: arturix/springbootappci
+          image: arturix/springbootappci:latest
           ports:
             - containerPort: 80
