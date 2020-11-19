@@ -462,9 +462,8 @@ kubectl get pod -o wide
 kubectl get all | grep mongodb
 ----
 
-https://youtu.be/X48VuDVv0do?t=5604
-
 === Mongo Express
+
 ==== Mongo Express ConfigMap
 .k8s/mongo-express-configmap.yaml
 ----
