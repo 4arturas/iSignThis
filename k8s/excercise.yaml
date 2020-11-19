@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: my-app-dep
+    labels:
+      app: my-app
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: my-app
+    template:
+      metadata:
+        labels:
+          app: my-app
+      spec:
+        containers:
+          - name: my-app
+            image: arturix/springbootappci:latest
+            ports:
+              - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-external-service
+spec:
+  selector:
+    app: my-app
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30001
+      protocol: TCP
