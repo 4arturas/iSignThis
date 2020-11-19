@@ -160,7 +160,7 @@ Kubelet -> Pod
 
 === Example cluster set-up
 
-== Minikube and kubectl - Local Setup
+== K3s, kubectl setup
 
 === Master
 ==== Install
@@ -409,7 +409,7 @@ YAML
 "Browser" -> "Mongo Express External Service"
 "Mongo Express External Service" -> "Mongo Express"
 "Mongo Express" -> "Mongo DB Internal Service"
-"Mongo DB Internal Service" -> "MongoDB Pod": "Secret: DB usr, DB pwd
+"Mongo DB Internal Service" -> "MongoDB Pod": Secret: DB usr, DB pwd
 .....
 
 === Lets create
