@@ -789,7 +789,7 @@ TODO
 
 .k8s/exercise.yaml
 ----
-include::k8s/excercise.yaml[]
+include::k8s/excercise-deployment.yaml[]
 ----
 
 [plantuml]
