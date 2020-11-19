@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-dep
+  labels:
+    app: my-app
+spec:
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      name: my-app
+    spec:
+      containers:
+        - name: my-app
+          image: arturix/springbootappci
+          ports:
+            - containerPort: 80
