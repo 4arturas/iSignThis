@@ -747,61 +747,20 @@ https://192.168.56.10:32323/
 
 package manager for K8s to package yaml files, like yum, apt
 
-TODO
+NOTE: TODO
 
 == Persisting Data in K8s with Volumes
+
+NOTE: TODO
 
 //++++
 //<iframe width="560" height="315" src="https://www.youtube.com/embed/X48VuDVv0do?start=9488&end=" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 //++++
 
 == Deploying Stateful Apps with StatefulSet
+
+NOTE: TODO
+
 == K8s Services explained
 
-
-
-[plantuml]
-....
-  partition "My Partition" {
-    (*) --> "Step1" <<Stage>>
-    --> "Step2" <<Stage>>
-    --> (*)
-    }
-
-    partition "First left partition" {
-    "Step1" -left-> "First left Action" <<Bash>>
-    }
-
-    partition "First right partition" {
-    "Step1" -right-> "First right Action" <<Bash>>
-    }
-
-    partition "Second left partition" {
-    "Step2" -left-> "Second left Action" <<Bash>>
-    }
-
-    partition "Second right partition" {
-    "Step2" -right-> "Second right Action" <<Bash>>
-    }
-
-    "Second left Action" .[hidden]u.> "First left Action"
-....
-
-.k8s/exercise.yaml
-----
-include::k8s/excercise-deployment.yaml[]
-----
-
-[plantuml]
-....
-rectangle Arrows
-rectangle Up
-rectangle Down
-rectangle Left
-rectangle Right
-
-Arrows -u-> Up
-Arrows -d-> Down
-Arrows -l-> Left
-Arrows -r-> Right
-....
+NOTE: TODO
